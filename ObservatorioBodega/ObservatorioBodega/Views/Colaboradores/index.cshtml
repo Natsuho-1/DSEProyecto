@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ObservatorioBodega.Models.Colaborador>
+
+<h2>Colaboradores</h2>
+<div style="display:flex; justify-content:flex-end; margin-bottom:15px">
+    <a href="@Url.Action("Formulario", "Colaboradores")">
+        <button type="button" class="btn btn-primary" style="width:175px">
+            <i class="fa-solid fa-plus" style="margin-right:5px"></i>
+            Agregar
+        </button>
+    </a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Contraseña</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contribuidor in Model)
+        {
+            <tr>
+                <td>@contribuidor.ID</td>
+                <td>@contribuidor.Usuario</td>
+                <td>@contribuidor.Correo</td>
+                <td>@contribuidor.Contrasena</td>
+                <td>@contribuidor.Nombre</td>
+                <td>@contribuidor.Apellido</td>
+                <td>@contribuidor.Rol</td>
+                <td>
+                    <button type="button" class="btn" style="background-color: #96F2B8 "
+                            onclick="editarData(@contribuidor.ID)">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button type="button" class="btn" style="background-color: #FF2819 "
+                            onclick="confirmarEliminacion(@contribuidor.ID)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function confirmarEliminacion(ID) {
+        if (confirm("¿Estás seguro de que deseas eliminar este dato?")) {
+            // Redirigir a la acción de eliminación si el usuario confirma
+            window.location.href = '@Url.Action("Eliminar", "Colaboradores")/' + ID;
+        }
+    }
+    function editarData(ID) {
+            window.location.href = '@Url.Action("Editar", "Colaboradores")/' + ID;
+    }
+</script>
+
+
+
