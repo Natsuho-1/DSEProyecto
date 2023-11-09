@@ -1,127 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
+using MySql.Data.MySqlClient;
 using ObservatorioBodega.Models;
 
 namespace ObservatorioBodega.Controllers
 {
     public class BodegasController : Controller
     {
-        private DefaultConnection db = new DefaultConnection();
-
+        //private DefaultConnection db = new DefaultConnection();
+        private IDbConnection Connection
+        {
+            get
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                return new MySqlConnection(connectionString);
+            }
+        }
         // GET: Bodegas
         public ActionResult Index()
         {
-            return View(db.Bodegas.ToList());
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                string query = "SELECT * FROM Bodegas";
+                var bodegas = dbConnection.Query<Bodega>(query);
+                return View(bodegas);
+            }
         }
 
-        // GET: Bodegas/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Bodega bodega = db.Bodegas.Find(id);
-            if (bodega == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bodega);
-        }
-
-        // GET: Bodegas/Create
+        //FUNCION QUE PERMITE NAVEGAR AL FORMULARIO AL DAR CLICK EN EL BOTON
         public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
-
-        // POST: Bodegas/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+        //FUNCION PARA INSERTAR LA DATA A LA BASE
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nombre,Descripcion,Cantidad")] Bodega bodega)
+        public ActionResult InsertarDatos(Bodega modelo)
         {
             if (ModelState.IsValid)
             {
-                db.Bodegas.Add(bodega);
-                db.SaveChanges();
+                // Realiza la inserción de datos en la base de datos utilizando Dapper
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                using (var dbConnection = new MySqlConnection(connectionString))
+                {
+                    dbConnection.Open();
+                    string query = "INSERT INTO Bodegas (ID,Nombre,Descripcion,Cantidad) VALUES (@ID, @Nombre, @Descripcion, @Cantidad)";
+                    dbConnection.Execute(query, modelo);
+                }
+
+                TempData["Exito"] = "Los datos se insertaron correctamente.";
+                // Redirecciona a la página de éxito o a donde desees
                 return RedirectToAction("Index");
             }
 
-            return View(bodega);
+            return View("Create", modelo); // Muestra el formulario nuevamente en caso de errores
         }
 
-        // GET: Bodegas/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Eliminar(int id)
         {
-            if (id == null)
+            // Lógica para eliminar el dato con el ID proporcionado
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (var dbConnection = new MySqlConnection(connectionString))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                dbConnection.Open();
+                string query = "DELETE FROM Bodegas WHERE ID = @ID";
+                dbConnection.Execute(query, new { ID = id });
             }
-            Bodega bodega = db.Bodegas.Find(id);
-            if (bodega == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bodega);
+            return RedirectToAction("Index"); // Redirige a la página principal o a donde desees
         }
+        public ActionResult Editar(int id)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (var dbConnection = new MySqlConnection(connectionString))
+            {
+                dbConnection.Open();
+                var modelo = dbConnection.QueryFirstOrDefault<Bodega>("SELECT * FROM Bodegas WHERE ID = @ID", new { ID = id });
 
-        // POST: Bodegas/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+                if (modelo == null)
+                {
+                    return HttpNotFound();
+                }
+
+                // Agregar el ID al modelo
+                //modelo.ID = id;
+                return View("Edit", modelo);
+            }
+        }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Nombre,Descripcion,Cantidad")] Bodega bodega)
+        public ActionResult GuardarEdicion(Bodega modelo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(bodega).State = EntityState.Modified;
-                db.SaveChanges();
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                using (var dbConnection = new MySqlConnection(connectionString))
+                {
+                    dbConnection.Open();
+                    var query = "UPDATE Bodegas SET Nombre = @Nombre, Descripcion = @Descripcion, Cantidad = @Cantidad WHERE ID = @ID";
+                    dbConnection.Execute(query, modelo);
+
+                    TempData["Exito"] = "Los cambios se guardaron correctamente.";
+                }
                 return RedirectToAction("Index");
             }
-            return View(bodega);
-        }
 
-        // GET: Bodegas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Bodega bodega = db.Bodegas.Find(id);
-            if (bodega == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bodega);
+            return View("Edit");
         }
-
-        // POST: Bodegas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        //FUNCION PARA REGRESAR AL INDEX
+        public ActionResult backToIndex()
         {
-            Bodega bodega = db.Bodegas.Find(id);
-            db.Bodegas.Remove(bodega);
-            db.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
