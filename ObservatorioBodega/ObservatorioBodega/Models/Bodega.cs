@@ -13,8 +13,8 @@ namespace ObservatorioBodega.Models
         public string Descripcion { get; set; }
         public int Cantidad { get; set; }
     }
-    public class DefaultConnection : DbContext
-    {
-        public DbSet<Bodega> Bodegas { get; set; }
-    }
+    //public class DefaultConnection : DbContext
+    //{
+    //    public DbSet<Bodega> Bodegas { get; set; }
+    //}
 }

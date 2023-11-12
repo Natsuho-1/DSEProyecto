@@ -45,5 +45,12 @@ namespace ObservatorioBodega
         //            defaults: new { controller = "Colaboradores", action = "Index", id = UrlParameter.Optional }
         //);
         //        }
+
+        //             routes.MapRoute(
+        //             name: "Login",
+         //            url: "Login/{action}/{id}",
+        //                defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional
+         //               }
+          //              )
     }
 }
