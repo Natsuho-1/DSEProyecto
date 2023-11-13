@@ -10,58 +10,70 @@
 </head>
 <body>    
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="@Url.Action("Index", "Menus", new { area = "" })" class="navbar-brand">
-                    <img src="~/Content/Multimedia/logomientras.png" alt="LogoUser" width="25" height="25">
-                </a>
-            </div>
+        @if (Session["UserRole"] != null)
+        {
+            <div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="@Url.Action("Index", "Menus", new { area = "" })" class="navbar-brand">
+                        <img src="~/Content/Multimedia/logomientras.png" alt="LogoUser" width="25" height="25">
+                    </a>
+                </div>
 
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Documentos", "Index", "Documentos")</li>
-                    <li>@Html.ActionLink("Bodega", "Index", "Bodegas")</li>
-                    <li>@Html.ActionLink("Colaboradores", "Index", "Colaboradores")</li>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Documentos", "Index", "Documentos")</li>
+                        <li>@Html.ActionLink("Bodega", "Index", "Bodegas")</li>
+                        @if (Session["UserRole"].ToString() == "1")
+                        {
+                            <li>@Html.ActionLink("Colaboradores", "Index", "Colaboradores")</li>
+                        }
 
 
-                    @if (Session["UserName"] != null)
-                    {
-                        <ul class="nav navbar-nav">
+                        @if (Session["UserName"] != null)
+                        {
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
+                                        @Html.Label($"{Session["UserName"]} - {Session["UserRole"]}")
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Salir", "Logout", "Login")</li>
+                                        <!-- Agrega más elementos del menú desplegable si es necesario -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
                             <li>
-                                <a>
-                                    @Html.ActionLink($"{Session["UserName"]} - {Session["UserRole"]}", "Index", "Colaboradores")
-                                </a>
+                                @Html.ActionLink("Iniciar Sesión", "Index", "Login")
                             </li>
-                            <li>
-                                @Html.ActionLink("Salir", "Logout", "Login")
-                                <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
-                            </li>
-                        </ul>
-                    }
+                        }
 
 
-                    else
-                    {
+                    </ul>
 
-                        <li>
-                            @Html.ActionLink("Iniciar Sesión", "Index", "Login")
-                        </li>
-                    }
 
-                </ul>
+
+                </div>
 
 
 
             </div>
-
-
-
-        </div>
+        }
+        else
+        {
+            <li style="color: white; font-size: 24px;">
+                @Html.ActionLink("Iniciar Sesión", "Index", "Login")
+            </li>
+        }
     </div>
     <div class="container body-content">
         @RenderBody()
@@ -69,6 +81,7 @@
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
+       
     </div>
 
     @Scripts.Render("~/bundles/jquery")

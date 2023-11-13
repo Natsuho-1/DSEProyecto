@@ -4,54 +4,62 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Eliminar</h2>
+@if (Session["UserRole"] != null && Session["UserName"] != null)
+{
+    <h2>Eliminar</h2>
 
-<h3>Seguro que desea eliminar este registro?</h3>
-<div>
-    <h4>Documento</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
+    <h3>Seguro que desea eliminar este registro?</h3>
+    <div>
+        <h4>Documento</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Titulo)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Usuario)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Usuario)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.RolUsuario)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.RolUsuario)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.RolUsuario)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.RolUsuario)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.URL)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.URL)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.URL)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.URL)
+            </dd>
 
-    </dl>
+        </dl>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Eliminar" class="btn btn-default" /> |
-            @Html.ActionLink("Regresar a lista", "Index")
-        </div>
-    }
-</div>
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Eliminar" class="btn btn-default" /> |
+                @Html.ActionLink("Regresar a lista", "Index")
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2>Inicie sesión para observar el contenido.</h2>
+}

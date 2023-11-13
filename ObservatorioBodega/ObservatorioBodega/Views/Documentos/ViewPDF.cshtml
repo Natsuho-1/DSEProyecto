@@ -1,9 +1,15 @@
 ﻿@model string
-
-@if (!string.IsNullOrEmpty(Model))
+@if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-    <script>
+    if (!string.IsNullOrEmpty(Model))
+    {
+        <script>
         // Abre una nueva pestaña o ventana con el PDF
         window.open('@Model', '_blank');
-    </script>
+        </script>
+    }
+}
+else
+{
+    <h2>Inicie sesión para observar el contenido.</h2>
 }

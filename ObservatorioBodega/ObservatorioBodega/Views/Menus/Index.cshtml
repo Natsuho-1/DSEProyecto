@@ -2,31 +2,40 @@
     ViewBag.Title = "Menu";
 }
 
+@if (Session["UserRole"] != null && Session["UserName"] != null)
+{
 <div class="row">
     <br />
+    <br />
+    <br />
+    <br />
 
-    <div class="col-md-4">        
-        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">            
+    <div class="col-md-4">
+        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">
             <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
             <h2>Documentos</h2>
-        </a>                      
+        </a>
     </div>
 
     <div class="col-md-4">
-
         <a class="btn btn-default" href="@Url.Action("Index", "Bodegas", new { area = "" })">
             <img src="~/Content/Multimedia/almacenlogo.png" height="100" width="100" />
             <h2>Bodegas</h2>
         </a>
-
     </div>
 
-    <div class="col-md-4">
-
-        <a class="btn btn-default" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
-            <img src="~/Content/Multimedia/colaboradoreslogo.png" height="100" width="100" />
-            <h2>Colaboradores</h2>
-        </a>
-
-    </div>
+    @if (Session["UserRole"].ToString() == "1")
+    {
+        <div class="col-md-4">
+            <a class="btn btn-default" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
+                <img src="~/Content/Multimedia/colaboradoreslogo.png" height="100" width="100" />
+                <h2>Colaboradores</h2>
+            </a>
+        </div>
+    }
 </div>
+}
+else
+{
+    <h2>No hay sesión activa.</h2>
+}
