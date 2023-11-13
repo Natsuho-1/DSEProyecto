@@ -2,14 +2,34 @@
     ViewBag.Title = "Menu";
 }
 
+<!--Informacion de quien a iniciado sesion (Nombre se ususario y rol) -->
+<h2>@ViewBag.Title</h2>
+<div>
+    @if (Session["UserName"] != null)
+    {
+        <p>Bienvenido, @Session["UserName"]!</p>
+        <p>Rol: @(Session["UserRole"].ToString() == "1" ? "Administrador" : "Colaborador")</p>
+
+        <!-- Enlace para cerrar sesión. Redirige a la acción "Logout" del controlador "Login". -->
+        @Html.ActionLink("Salir", "Logout", "Login")
+    }
+
+
+    <!-- En caso de no estar logeado. -->
+    else
+    {
+    <p>No has iniciado sesión.</p>
+    }
+</div>
+
 <div class="row">
     <br />
 
-    <div class="col-md-4">        
-        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">            
+    <div class="col-md-4">
+        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">
             <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
             <h2>Documentos</h2>
-        </a>                      
+        </a>
     </div>
 
     <div class="col-md-4">
@@ -29,4 +49,6 @@
         </a>
 
     </div>
+
+
 </div>

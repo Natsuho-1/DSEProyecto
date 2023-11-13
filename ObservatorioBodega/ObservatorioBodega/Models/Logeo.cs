@@ -16,6 +16,8 @@ namespace ObservatorioBodega.Models
         [DataType(DataType.Password)]
         public string Contrasena { get; set; }
 
+      
+
         public int Rol { get; set; }
     }
 }

@@ -43,13 +43,13 @@ namespace ObservatorioBodega.Controllers
 
                     if (user != null && user.Contrasena == model.Contrasena)
                     {
-                        // Verificar que el rol del usuario coincide con el rol en la base de datos 
-                        if (user.Rol == model.Rol)
-                        {
-                            // Iniciar sesión y redirigir de moneto al index de colaboradores
-                            TempData["Message"] = "Inicio de sesión exitoso.";
-                            return RedirectToAction("Index", "Menus");
-                        }
+                        // Almacenar información en la sesión
+                        Session["UserName"] = user.Usuario;
+                        Session["UserRole"] = user.Rol;
+
+                        // Iniciar sesión y redirigir al index de colaboradores
+                        TempData["Message"] = "Inicio de sesión exitoso.";
+                        return RedirectToAction("Index", "Menus");
                     }
 
                     ModelState.AddModelError("", "Credenciales no válidas.");
@@ -60,9 +60,9 @@ namespace ObservatorioBodega.Controllers
 
         public ActionResult Logout()
         {
+            // Eliminar la información de la sesión al cerrar sesión
+            Session.Clear();
             return RedirectToAction("Index", "Login");
         }
-
-
     }
 }
