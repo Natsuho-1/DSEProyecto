@@ -260,7 +260,6 @@
     <Content Include="Views\Documentos\Details.cshtml" />
     <Content Include="Views\Documentos\Edit.cshtml" />
     <Content Include="Views\Documentos\Index.cshtml" />
-    <Content Include="Views\ViewPDF\ViewPDF.cshtml" />
     <Content Include="Views\Colaboradores\formAddCollaborators.cshtml" />
     <Content Include="Views\Colaboradores\formEditCollaborators.cshtml" />
     <Content Include="Views\Colaboradores\index.cshtml" />
@@ -270,6 +269,8 @@
     <Content Include="Views\Bodegas\Details.cshtml" />
     <Content Include="Views\Bodegas\Edit.cshtml" />
     <Content Include="Views\Bodegas\Index.cshtml" />
+    <Content Include="Views\ViewPDF\ViewPDF.cshtml" />
+    <Content Include="Views\Documentos\ViewPDF.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

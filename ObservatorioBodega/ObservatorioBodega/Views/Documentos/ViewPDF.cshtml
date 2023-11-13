@@ -1,0 +1,9 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    <script>
+        // Abre una nueva pestaña o ventana con el PDF
+        window.open('@Model', '_blank');
+    </script>
+}

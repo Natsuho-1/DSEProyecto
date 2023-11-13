@@ -20,11 +20,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ColaboradorID)
+            @Html.DisplayNameFor(model => model.Usuario)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ColaboradorID)
+            @Html.DisplayFor(model => model.Usuario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RolUsuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RolUsuario)
         </dd>
 
         <dt>
@@ -37,7 +45,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
