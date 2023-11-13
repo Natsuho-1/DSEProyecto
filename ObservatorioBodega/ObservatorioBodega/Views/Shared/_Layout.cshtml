@@ -5,63 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>@ViewBag.Title - Aplicacion</title>
+    <link rel="stylesheet" href="~/Content/diseños.css"/>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>    
+<body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         @if (Session["UserRole"] != null)
         {
-            <div>
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href="@Url.Action("Index", "Menus", new { area = "" })" class="navbar-brand">
-                        <img src="~/Content/Multimedia/logomientras.png" alt="LogoUser" width="25" height="25">
-                    </a>
+            <div class="menu">
+                <div class="izq">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
+
+
+                        <a href="@Url.Action("index", "Menus")">
+                            <img src="@Url.Content("~/Content/Multimedia/observatorio.png")" alt="LogoUser" width="100" height="50" />
+                        </a>
+
+                    </div>
                 </div>
+                <div class="cen">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Documentos", "Index", "Documentos")</li>
+                            <li>@Html.ActionLink("Bodega", "Index", "Bodegas")</li>
+                            @if (Session["UserRole"].ToString() == "1")
+                            {
+                                <li>@Html.ActionLink("Colaboradores", "Index", "Colaboradores")</li>
+                            }
 
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Documentos", "Index", "Documentos")</li>
-                        <li>@Html.ActionLink("Bodega", "Index", "Bodegas")</li>
-                        @if (Session["UserRole"].ToString() == "1")
-                        {
-                            <li>@Html.ActionLink("Colaboradores", "Index", "Colaboradores")</li>
-                        }
 
+                        </ul>
+                    </div>
+                </div>
+                <div class="der">
+                    @if (Session["UserName"] != null)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
+                                    @Html.Label($"{Session["UserName"]} - {Session["UserRole"]}")
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        @Html.ActionLink("Salir", "Logout", "Login", null, new { id = "salir" })
+                                        <img src="~/Content/Multimedia/cerrarsesion.png" alt="LogoUser" width="25" height="25" />
+                                    </li>
 
-                        @if (Session["UserName"] != null)
-                        {
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
-                                        @Html.Label($"{Session["UserName"]} - {Session["UserRole"]}")
-                                        <b class="caret"></b>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Salir", "Logout", "Login")</li>
-                                        <!-- Agrega más elementos del menú desplegable si es necesario -->
-                                    </ul>
-                                </li>
-                            </ul>
-                        }
-                        else
-                        {
-                            <li>
-                                @Html.ActionLink("Iniciar Sesión", "Index", "Login")
+                                    <!-- Agrega más elementos del menú desplegable si es necesario -->
+                                </ul>
                             </li>
-                        }
-
-
-                    </ul>
-
-
-
+                        </ul>
+                    }
                 </div>
 
 
@@ -81,7 +84,7 @@
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
-       
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -89,3 +92,10 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<style>
+    #salir {
+        text-decoration: none; /* Quitar el subrayado del enlace */
+        color: transparent; /* Hacer el texto transparente */
+        display: inline-block; /* Asegurarse de que el enlace ocupe espacio aunque el texto sea transparente */
+    }
+</style>

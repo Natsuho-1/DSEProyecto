@@ -74,56 +74,59 @@ namespace ObservatorioBodega.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Titulo,URL")] Documentos documento, HttpPostedFileBase pdfFile)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(documento.Titulo) && !string.IsNullOrEmpty(documento.URL))
             {
-                int Usuario = Convert.ToInt32(Session["UserID"]);
-                int rolUsuario = Convert.ToInt32(Session["UserRole"]);
-
-                if (pdfFile != null && pdfFile.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    // Validación del nombre del archivo
-                    string fileName = Path.GetFileName(pdfFile.FileName);
-                    if (!IsValidFileName(fileName))
+                    int Usuario = Convert.ToInt32(Session["UserID"]);
+                    int rolUsuario = Convert.ToInt32(Session["UserRole"]);
+
+                    if (pdfFile != null && pdfFile.ContentLength > 0)
                     {
-                        ModelState.AddModelError("pdfFile", "El nombre del archivo no es válido.");
-                        return View(documento);
+                        // Validación del nombre del archivo
+                        string fileName = Path.GetFileName(pdfFile.FileName);
+                        if (!IsValidFileName(fileName))
+                        {
+                            ModelState.AddModelError("pdfFile", "El nombre del archivo no es válido.");
+                            return View(documento);
+                        }
+
+                        // Guarda el archivo PDF en el servidor
+                        string serverPath = Server.MapPath("~/Uploads/PDFs/");
+                        string fullPath = Path.Combine(serverPath, fileName);
+
+                        // Verifica si el archivo ya existe
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            string alertScript = "<script>alert('El archivo ya existe.');</script>";
+                            ViewBag.AlertScript = new HtmlString(alertScript);
+
+                            return View(documento);
+                        }
+
+                        pdfFile.SaveAs(fullPath);
+
+                        // Asigna la ruta absoluta al campo URL
+                        documento.URL = Url.Content("/Uploads/PDFs/" + fileName);
+
+                        // Asigna los valores de Usuario y RolUsuario
+                        documento.Usuario = Usuario;
+                        documento.RolUsuario = rolUsuario;
+
+                        using (IDbConnection dbConnection = Connection)
+                        {
+                            dbConnection.Open();
+                            string query = "INSERT INTO Documentos (Titulo, UsuarioID, Rol, URL) VALUES (@Titulo, @Usuario, @RolUsuario, @URL)";
+                            dbConnection.Execute(query, documento);
+                        }
+
+                        return RedirectToAction("Index");
                     }
 
-                    // Guarda el archivo PDF en el servidor
-                    string serverPath = Server.MapPath("~/Uploads/PDFs/");
-                    string fullPath = Path.Combine(serverPath, fileName);
-
-                    // Verifica si el archivo ya existe
-                    if (System.IO.File.Exists(fullPath))
-                    {
-                        string alertScript = "<script>alert('El archivo ya existe.');</script>";
-                        ViewBag.AlertScript = new HtmlString(alertScript);
-
-                        return View(documento);
-                    }
-
-                    pdfFile.SaveAs(fullPath);
-
-                    // Asigna la ruta absoluta al campo URL
-                    documento.URL = Url.Content("/Uploads/PDFs/" + fileName);
-
-                    // Asigna los valores de Usuario y RolUsuario
-                    documento.Usuario = Usuario;
-                    documento.RolUsuario = rolUsuario;
-
-                    using (IDbConnection dbConnection = Connection)
-                    {
-                        dbConnection.Open();
-                        string query = "INSERT INTO Documentos (Titulo, UsuarioID, Rol, URL) VALUES (@Titulo, @Usuario, @RolUsuario, @URL)";
-                        dbConnection.Execute(query, documento);
-                    }
-
-                    return RedirectToAction("Index");
+                    return View(documento);
                 }
-
-                return View(documento);
             }
-
+            ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View(documento);
         }
 

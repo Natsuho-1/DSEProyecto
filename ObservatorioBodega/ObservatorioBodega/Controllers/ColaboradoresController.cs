@@ -98,19 +98,20 @@ namespace ObservatorioBodega.Controllers
         [HttpPost]
         public ActionResult GuardarEdicion(Colaborador modelo)
         {
-            if (ModelState.IsValid)
-            {
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-                using (var dbConnection = new MySqlConnection(connectionString))
+               if (ModelState.IsValid)
                 {
-                    dbConnection.Open();
-                    var query = "UPDATE Colaboradores SET Usuario = @Usuario, Correo = @Correo, Contrasena = @Contrasena, Nombre = @Nombre, Apellido = @Apellido, Rol = @Rol WHERE ID = @ID";
-                    dbConnection.Execute(query, modelo);
+                    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    using (var dbConnection = new MySqlConnection(connectionString))
+                    {
+                        dbConnection.Open();
+                        var query = "UPDATE Colaboradores SET Usuario = @Usuario, Correo = @Correo, Contrasena = @Contrasena, Nombre = @Nombre, Apellido = @Apellido, Rol = @Rol WHERE ID = @ID";
+                        dbConnection.Execute(query, modelo);
 
-                    TempData["Exito"] = "Los cambios se guardaron correctamente.";
+                        TempData["Exito"] = "Los cambios se guardaron correctamente.";
+                    }
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
-            }
+            
 
             return View("formEditCollaborators");
         }

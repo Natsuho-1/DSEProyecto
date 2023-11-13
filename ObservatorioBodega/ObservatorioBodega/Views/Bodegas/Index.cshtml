@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<ObservatorioBodega.Models.Bodega>
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
+    <br />
+    <br />
     <h2>Bodegas</h2>
     <div style="display:flex; justify-content:flex-end; margin-bottom:15px">
         <a href="@Url.Action("Create", "Bodegas")">

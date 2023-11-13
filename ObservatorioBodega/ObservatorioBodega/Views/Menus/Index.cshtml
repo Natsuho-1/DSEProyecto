@@ -10,30 +10,47 @@
     <br />
     <br />
 
-    <div class="col-md-4">
-        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">
-            <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
-            <h2>Documentos</h2>
-        </a>
-    </div>
+    <div class="opciones">
+        <button>
+            <a class="btn" href="@Url.Action("Index", "Documentos", new { area = "" })">
+                <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
+                <h2>Documentos</h2>
+            </a>
+        </button>
 
-    <div class="col-md-4">
-        <a class="btn btn-default" href="@Url.Action("Index", "Bodegas", new { area = "" })">
-            <img src="~/Content/Multimedia/almacenlogo.png" height="100" width="100" />
-            <h2>Bodegas</h2>
-        </a>
-    </div>
+        <button>
+            <a class="btn" href="@Url.Action("Index", "Bodegas", new { area = "" })">
+                <img src="~/Content/Multimedia/almacenlogo.png" height="100" width="100" />
+                <h2>Bodegas</h2>
+            </a>
+        </button>
 
-    @if (Session["UserRole"].ToString() == "1")
+         @if (Session["UserRole"].ToString() == "1")
     {
-        <div class="col-md-4">
-            <a class="btn btn-default" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
+        <button>
+            <a class="btn" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
                 <img src="~/Content/Multimedia/colaboradoreslogo.png" height="100" width="100" />
                 <h2>Colaboradores</h2>
             </a>
-        </div>
-    }
+        </button>
+         }
+    </div>
+
 </div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 }
 else
 {

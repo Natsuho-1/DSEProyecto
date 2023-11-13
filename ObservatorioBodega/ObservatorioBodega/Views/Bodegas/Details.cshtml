@@ -6,44 +6,46 @@
 
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-<h2>Details</h2>
+    <br />
+    <br />
+    <h2>Detalles</h2>
 
-<div>
-    <h4>Bodega</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+    <div>
+        <h4>Bodega</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Cantidad)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Cantidad)
+            </dd>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 }
 else
 {
-<h2>Inicie sesión para observar el contenido.</h2>
+    <h2>Inicie sesión para observar el contenido.</h2>
 }
