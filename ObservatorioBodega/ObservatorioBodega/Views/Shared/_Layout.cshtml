@@ -8,7 +8,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>    
+<body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div>
             <div class="navbar-header">
@@ -28,21 +29,40 @@
                     <li>@Html.ActionLink("Bodega", "Index", "Bodegas")</li>
                     <li>@Html.ActionLink("Colaboradores", "Index", "Colaboradores")</li>
 
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Usuario", "Index", "Colaboradores")</li>
-                    <li>
-                        <a class="navbar-brand">
-                            <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
-                        </a>
-                    </li>
-                </ul>
-            </div>
+
+                    @if (Session["UserName"] != null)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a>
+                                    @Html.ActionLink($"{Session["UserName"]} - {Session["UserRole"]}", "Index", "Colaboradores")
+                                </a>
+                            </li>
+                            <li>
+                                @Html.ActionLink("Salir", "Logout", "Login")
+                                <img src="~/Content/Multimedia/userlogo.png" alt="LogoUser" width="25" height="25">
+                            </li>
+                        </ul>
+                            }
+
+
+                            else
+                            {
+
+                            <li>
+                                @Html.ActionLink("Iniciar Sesión", "Index", "Login")
+                            </li>
+                            }
+
+                        </ul>
 
 
 
+</div>
         </div>
     </div>
+
+
     <div class="container body-content">
         @RenderBody()
         <hr />

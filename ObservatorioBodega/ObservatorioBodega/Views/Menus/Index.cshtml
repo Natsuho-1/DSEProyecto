@@ -2,29 +2,6 @@
     ViewBag.Title = "Menu";
 }
 
-<!--Informacion de quien a iniciado sesion (Nombre se ususario y rol) -->
-<h2>@ViewBag.Title</h2>
-<div>
-    @if (Session["UserName"] != null)
-    {
-        <p>Bienvenido, @Session["UserName"]!</p>
-        <p>Rol: @(Session["UserRole"].ToString() == "1" ? "Administrador" : "Colaborador")</p>
-
-        <!-- Enlace para cerrar sesión. Redirige a la acción "Logout" del controlador "Login". -->
-        @Html.ActionLink("Salir", "Index", "Login")
-    }
-
-
-
-    else
-    {
-        <!-- En caso de no estar logeado. -->
-        <p>No has iniciado sesión.</p>
-        @Html.ActionLink("Iniciar sesion", "Logout", "Login")
-
-    }
-</div>
-
 <div class="row">
     <br />
 
