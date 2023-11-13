@@ -5,50 +5,63 @@
     ViewBag.Title = "Iniciar Sesión";
 }
 
-<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Index", "Login", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Usuario, new { @class = "control-label" })
-        @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Contrasena, new { @class = "control-label" })
-        @Html.PasswordFor(model => model.Contrasena, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Rol, new { @class = "control-label" })
-        @Html.DropDownListFor(model => model.Rol, new SelectList(new List<SelectListItem>
-        {
-
-       //Se pueden agregar mas roles
-            new SelectListItem { Text = "Administrador", Value = "1" },
-            new SelectListItem { Text = "Colaborador", Value = "2" },
+<style>
+    body {
+        background-image: url('../../Content/Multimedia/espacio.jpg');
+        background-size: cover;       
+        background-repeat: no-repeat;
+    }
+</style>
 
 
-        }, "Value", "Text"), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
-    </div>
 
-    <div class="form-group">
-        <input type="submit" value="Iniciar Sesión" class="btn btn-primary" />
-    </div>
+<div style="background-color: white;" class="container ">
+    <h2>@ViewBag.Title</h2>
+    @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Usuario, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Contrasena, new { @class = "control-label" })
+            @Html.PasswordFor(model => model.Contrasena, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Rol, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Rol, new SelectList(new List<SelectListItem>
+            {
+
+           //Se pueden agregar mas roles
+                new SelectListItem { Text = "Administrador", Value = "1" },
+                new SelectListItem { Text = "Colaborador", Value = "2" },
 
 
-   //Lo de registro es de revisar 
-}
+            }, "Value", "Text"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
+        </div>
 
-<p>
-   
-    @Html.ActionLink("Regístrate", "Registro", "Login")
-</p>
+        <div class="form-group">
+            <input type="submit" value="Iniciar Sesión" class="btn btn-primary" />
+        </div>
+
+
+        //Lo de registro es de revisar
+    }
+
+    <p>
+
+        @Html.ActionLink("Regístrate", "Registro", "Login")
+    </p>
+
+</div>
 

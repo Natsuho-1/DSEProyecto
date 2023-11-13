@@ -218,11 +218,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\diseños.css" />
     <Content Include="Content\Multimedia\agre.png" />
     <Content Include="Content\Multimedia\almacenlogo.png" />
+    <Content Include="Content\Multimedia\cerrarsesion.png" />
     <Content Include="Content\Multimedia\colaboradoreslogo.png" />
     <Content Include="Content\Multimedia\documentoslogo.png" />
+    <Content Include="Content\Multimedia\espacio.jpg" />
     <Content Include="Content\Multimedia\logomientras.png" />
+    <Content Include="Content\Multimedia\observatorio.png" />
     <Content Include="Content\Multimedia\userlogo.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

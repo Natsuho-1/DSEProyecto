@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<ObservatorioBodega.Models.Bodega>
-
+<div>
 <h2>Bodegas</h2>
 <div style="display:flex; justify-content:flex-end; margin-bottom:15px">
     <a href="@Url.Action("Create", "Bodegas")">
@@ -52,3 +52,4 @@
             window.location.href = '@Url.Action("Editar", "Bodegas")/' + ID;
     }
 </script>
+
