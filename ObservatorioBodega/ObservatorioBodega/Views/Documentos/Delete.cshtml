@@ -6,6 +6,8 @@
 
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
+    if ((int)Session["UserState"] == 1)
+    {
     <h2>Eliminar</h2>
 
     <h3>Seguro que desea eliminar este registro?</h3>
@@ -61,5 +63,10 @@
 }
 else
 {
-    <h2>Inicie sesión para observar el contenido.</h2>
+    <h2>Usted ya no posee permisos de acceso.</h2>
+}
+}
+else
+{
+<h2>Inicie sesión para observar el contenido.</h2>
 }

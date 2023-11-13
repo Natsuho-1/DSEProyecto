@@ -1,15 +1,23 @@
 ﻿@model string
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-    if (!string.IsNullOrEmpty(Model))
+    if ((int)Session["UserState"] == 1)
     {
+        if (!string.IsNullOrEmpty(Model))
+        {
         <script>
         // Abre una nueva pestaña o ventana con el PDF
         window.open('@Model', '_blank');
         </script>
     }
+
 }
 else
 {
-    <h2>Inicie sesión para observar el contenido.</h2>
+    <h2>Usted ya no posee permisos de acceso.</h2>
+}
+}
+else
+{
+<h2>Inicie sesión para observar el contenido.</h2>
 }

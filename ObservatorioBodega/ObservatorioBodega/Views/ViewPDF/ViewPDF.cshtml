@@ -1,10 +1,18 @@
 ﻿@model string
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-    <script>
+    if ((int)Session["UserState"] == 1)
+    {
+        <script>
     // Abre una nueva pestaña o ventana con el PDF
     window.open('@Model', '_blank');
-    </script>
+        </script>
+
+    }
+    else
+    {
+        <h2>Usted ya no posee permisos de acceso.</h2>
+    }
 }
 else
 {

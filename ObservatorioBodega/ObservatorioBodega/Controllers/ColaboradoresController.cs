@@ -64,19 +64,19 @@ namespace ObservatorioBodega.Controllers
             ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View("formAddCollaborators", modelo); // Muestra el formulario nuevamente en caso de errores
         }
-                
+
         public ActionResult Eliminar(int id)
         {
-            // Lógica para eliminar el dato con el ID proporcionado
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (var dbConnection = new MySqlConnection(connectionString))
             {
                 dbConnection.Open();
-                string query = "DELETE FROM Colaboradores WHERE ID = @ID";
+                string query = "UPDATE Colaboradores SET Estado = 2 WHERE ID = @ID";
                 dbConnection.Execute(query, new { ID = id });
             }
-            return RedirectToAction("Index"); // Redirige a la página principal o a donde desees
+            return RedirectToAction("Index");
         }
+
         public ActionResult Editar(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;

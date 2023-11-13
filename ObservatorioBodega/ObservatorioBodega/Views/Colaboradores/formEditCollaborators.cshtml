@@ -5,67 +5,80 @@
 }
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-    using (Html.BeginForm("GuardarEdicion", "Colaboradores", FormMethod.Post))
+    if ((int)Session["UserState"] == 1)
     {
-        @Html.AntiForgeryToken()
-        <div style="display:flex; justify-content:flex-start">
-            <a href="@Url.Action("backToIndex", "Colaboradores")">
-                <button type="button" class="btn btn-danger">
-                    <i class="fa-solid fa-arrow-left" style="margin-right:5px"></i>Regresar
-                </button>
-            </a>
-        </div>
-        <div style="display:flex; justify-content:center">
-            <div style="width:25%;">
+        using (Html.BeginForm("GuardarEdicion", "Colaboradores", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div style="display:flex; justify-content:flex-start">
+                <a href="@Url.Action("backToIndex", "Colaboradores")">
+                    <button type="button" class="btn btn-danger">
+                        <i class="fa-solid fa-arrow-left" style="margin-right:5px"></i>Regresar
+                    </button>
+                </a>
+            </div>
+            <div style="display:flex; justify-content:center">
+                <div style="width:25%;">
 
-                @Html.HiddenFor(model => model.ID)
-                <div class="form-group">
-                    @if (Model != null)
-                    {
-                        <p>ID del registro: @Model.ID</p>
-                    }
-                </div>
+                    @Html.HiddenFor(model => model.ID)
+                    <div class="form-group">
+                        @if (Model != null)
+                        {
+                            <p>ID del registro: @Model.ID</p>
+                        }
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Nombre)
-                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre)
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Apellido)
-                    @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
-                </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Apellido)
+                        @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Correo)
-                    @Html.TextBoxFor(model => model.Correo, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
-                </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Correo)
+                        @Html.TextBoxFor(model => model.Correo, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Usuario)
-                    @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
-                </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Usuario)
+                        @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Rol)
-                    @Html.TextBoxFor(model => model.Rol, new { @class = "form-control", @readonly = "readonly" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Rol)
+                        @Html.TextBoxFor(model => model.Rol, new { @class = "form-control", @readonly = "readonly" })
 
-                </div>
+                    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Contrasena)
-                    @Html.TextBoxFor(model => model.Contrasena, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Estado)
+                        @Html.TextBoxFor(model => model.Estado, new { @class = "form-control", @readonly = "readonly" })
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Contrasena)
+                        @Html.PasswordFor(model => model.Contrasena, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Contrasena, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
-        <div style="display:flex; justify-content:center; margin-top:15px">
-            <button type="submit" class="btn btn-primary">Editar</button>
-        </div>
+            <div style="display:flex; justify-content:center; margin-top:15px">
+                <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+        }
+    }
+    else
+    {
+        <h2>Usted ya no posee permisos de acceso.</h2>
     }
 }
 else

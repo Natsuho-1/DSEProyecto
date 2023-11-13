@@ -25,6 +25,7 @@ CREATE TABLE Colaboradores (
     Contrasena VARCHAR(255) NOT NULL,
     Nombre VARCHAR(255) NOT NULL,
     Apellido VARCHAR(255) NOT NULL,
+    Estado INT NOT NULL default 1,
     FOREIGN KEY (Rol) REFERENCES Roles(ID)
 );
 

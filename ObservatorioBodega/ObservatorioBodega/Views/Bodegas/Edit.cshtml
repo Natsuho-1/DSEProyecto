@@ -5,9 +5,11 @@
 }
 @if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-
-    using (Html.BeginForm("GuardarEdicion", "Bodegas", FormMethod.Post))
+    if ((int)Session["UserState"] == 1)
     {
+
+        using (Html.BeginForm("GuardarEdicion", "Bodegas", FormMethod.Post))
+        {
         @Html.AntiForgeryToken()
         <br />
         <br />
@@ -52,9 +54,13 @@
             <button type="submit" class="btn btn-primary">Editar</button>
         </div>
     }
-
 }
 else
 {
-    <h2>Inicie sesión para observar el contenido.</h2>
+    <h2>Usted ya no posee permisos de acceso.</h2>
+}
+}
+else
+{
+<h2>Inicie sesión para observar el contenido.</h2>
 }

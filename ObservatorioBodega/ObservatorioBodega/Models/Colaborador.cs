@@ -24,6 +24,8 @@ namespace ObservatorioBodega.Models
         [Required(ErrorMessage = "El campo Apellido es obligatorio.")]
         public string Apellido { get; set; }
         public int Rol { get; set; }
+
+        public int Estado { get; set; }
     }
 
 }

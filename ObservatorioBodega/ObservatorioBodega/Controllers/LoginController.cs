@@ -47,6 +47,7 @@ namespace ObservatorioBodega.Controllers
                         Session["UserID"] = user.ID;
                         Session["UserName"] = user.Usuario;
                         Session["UserRole"] = user.Rol;
+                        Session["UserState"] = user.Estado;
 
                         // Iniciar sesión y redirigir al index de colaboradores
                         TempData["Message"] = "Inicio de sesión exitoso.";

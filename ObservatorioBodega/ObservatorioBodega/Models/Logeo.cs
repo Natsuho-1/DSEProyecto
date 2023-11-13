@@ -20,5 +20,7 @@ namespace ObservatorioBodega.Models
 
 
         public int Rol { get; set; }
+
+        public int Estado { get; set; }
     }
 }
