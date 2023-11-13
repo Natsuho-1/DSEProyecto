@@ -11,14 +11,17 @@
         <p>Rol: @(Session["UserRole"].ToString() == "1" ? "Administrador" : "Colaborador")</p>
 
         <!-- Enlace para cerrar sesión. Redirige a la acción "Logout" del controlador "Login". -->
-        @Html.ActionLink("Salir", "Logout", "Login")
+        @Html.ActionLink("Salir", "Index", "Login")
     }
 
 
-    <!-- En caso de no estar logeado. -->
+
     else
     {
-    <p>No has iniciado sesión.</p>
+        <!-- En caso de no estar logeado. -->
+        <p>No has iniciado sesión.</p>
+        @Html.ActionLink("Iniciar sesion", "Logout", "Login")
+
     }
 </div>
 
