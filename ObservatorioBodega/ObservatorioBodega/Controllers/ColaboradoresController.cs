@@ -41,24 +41,30 @@ namespace ObservatorioBodega.Controllers
         [HttpPost]
         public ActionResult InsertarDatos(Colaborador modelo)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(modelo.Usuario) && !string.IsNullOrEmpty(modelo.Correo) && !string.IsNullOrEmpty(modelo.Contrasena)
+                && !string.IsNullOrEmpty(modelo.Nombre) && !string.IsNullOrEmpty(modelo.Apellido))
             {
-                // Realiza la inserción de datos en la base de datos utilizando Dapper
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-                using (var dbConnection = new MySqlConnection(connectionString))
+                if (ModelState.IsValid)
                 {
-                    dbConnection.Open();
-                    string query = "INSERT INTO Colaboradores (Usuario, Correo, Contrasena, Nombre, Apellido, Rol) VALUES (@Usuario, @Correo, @Contrasena, @Nombre, @Apellido, @Rol)";
-                    dbConnection.Execute(query, modelo);
+                    // Realiza la inserción de datos en la base de datos utilizando Dapper
+                    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    using (var dbConnection = new MySqlConnection(connectionString))
+                    {
+                        dbConnection.Open();
+                        string query = "INSERT INTO Colaboradores (Usuario, Correo, Contrasena, Nombre, Apellido, Rol) VALUES (@Usuario, @Correo, @Contrasena, @Nombre, @Apellido, @Rol)";
+                        dbConnection.Execute(query, modelo);
+                    }
+
+                    TempData["Exito"] = "Los datos se insertaron correctamente.";
+                    // Redirecciona a la página de éxito o a donde desees
+                    return RedirectToAction("Index");
                 }
-
-                TempData["Exito"] = "Los datos se insertaron correctamente.";
-                // Redirecciona a la página de éxito o a donde desees
-                return RedirectToAction("Index");
+                return View("formAddCollaborators", modelo); // Muestra el formulario nuevamente en caso de errores
             }
-
+            ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View("formAddCollaborators", modelo); // Muestra el formulario nuevamente en caso de errores
         }
+                
         public ActionResult Eliminar(int id)
         {
             // Lógica para eliminar el dato con el ID proporcionado
