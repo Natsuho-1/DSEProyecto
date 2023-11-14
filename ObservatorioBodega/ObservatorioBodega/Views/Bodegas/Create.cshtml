@@ -7,6 +7,8 @@
         if ((int)Session["UserState"] == 1)
         {
             @Html.AntiForgeryToken()
+            <br />
+            <br />
             <div style="display:flex; justify-content:flex-start">
                 <a href="@Url.Action("backToIndex", "Bodegas")">
                     <button type="button" class="btn btn-danger">

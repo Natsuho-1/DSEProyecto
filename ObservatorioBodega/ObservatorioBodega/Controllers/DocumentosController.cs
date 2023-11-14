@@ -74,8 +74,7 @@ namespace ObservatorioBodega.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Titulo,URL")] Documentos documento, HttpPostedFileBase pdfFile)
         {
-            if (!string.IsNullOrEmpty(documento.Titulo) && !string.IsNullOrEmpty(documento.URL))
-            {
+           
                 if (ModelState.IsValid)
                 {
                     int Usuario = Convert.ToInt32(Session["UserID"]);
@@ -125,8 +124,6 @@ namespace ObservatorioBodega.Controllers
 
                     return View(documento);
                 }
-            }
-            ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View(documento);
         }
 

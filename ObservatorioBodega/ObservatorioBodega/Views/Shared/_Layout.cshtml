@@ -55,10 +55,10 @@
                                     <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li>
+                                    <button>
                                         @Html.ActionLink("Salir", "Logout", "Login", null, new { id = "salir" })
                                         <img src="~/Content/Multimedia/cerrarsesion.png" alt="LogoUser" width="25" height="25" />
-                                    </li>
+                                    </button>
 
                                     <!-- Agrega más elementos del menú desplegable si es necesario -->
                                 </ul>
@@ -78,11 +78,13 @@
             </li>
         }
     </div>
+    <br />
+    <br />
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year -OMM</p>
         </footer>
 
     </div>
