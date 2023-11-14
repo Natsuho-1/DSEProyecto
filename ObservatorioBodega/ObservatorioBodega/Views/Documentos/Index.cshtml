@@ -3,85 +3,98 @@
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Documentos</h2>
-
-<div style="display:flex; justify-content:flex-end; margin-bottom:15px">
-
-    <a href="@Url.Action("Create")" style="width:175px">
-        <button type="button" class="btn btn-primary" style="width:175px">
-            <i class="fa-solid fa-plus" style="margin-right:5px"></i>
-            Agregar
-        </button>
-
-    </a>
-
-</div>
-
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Titulo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Fecha)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.URL)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
+@if (Session["UserRole"] != null && Session["UserName"] != null)
+{
+    if ((int)Session["UserState"] == 1)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @item.Nombre @item.Apellido
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.URL)
-            </td>
-            <td>
-                <a href="@Url.Action("Edit", new { id = item.ID })" style="width: 175px">
-                    <button type="button" class="btn" style="background-color: #96F2B8; color: black; margin-right: 10px">
-                        <i class="fa-solid fa-pen" style="margin-right: 10px;"></i>
-                        <!-- Edit -->
-                    </button>
-                </a>
-                <a href="javascript:void(0);" onclick="openPdfInNewTab(@item.ID, event)" class="btn btn-info">Ver PDF</a>
+        <br />
+        <br />
+        <h2>Documentos</h2>
+
+        <div style="display:flex; justify-content:flex-end; margin-bottom:15px">
+
+            <a href="@Url.Action("Create")" style="width:175px">
+                <button type="button" class="btn btn-primary" style="width:175px">
+                    <i class="fa-solid fa-plus" style="margin-right:5px"></i>
+                    Agregar
+                </button>
+
+            </a>
+
+        </div>
 
 
-                <a href="@Url.Action("Details", new { id = item.ID })" style="width: 175px">
-                    <button type="button" class="btn" style="background-color: #FFFF00; color: black; margin-right: 10px ">
-                        <i class="fa-solid fa-info" style="margin-right: 10px"></i>
-                        <!-- Details -->
-                    </button>
-                </a>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Usuario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.URL)
+                </th>
+                <th></th>
+            </tr>
 
-                <a href="@Url.Action("Delete", new { id = item.ID })" style="width: 175px">
-                    <button type="button" class="btn" style="background-color: #FF2819; color: black; margin-right: 10px">
-                        <i class="fa-solid fa-trash" style="margin-right: 10px"></i>
-                        <!-- Delete -->
-                    </button>
-                </a>
-            </td>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        @item.Nombre @item.Apellido
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rol)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.URL)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = item.ID })" style="width: 175px">
+                            <button type="button" class="btn" style="background-color: #96F2B8; color: black; margin-right: 10px">
+                                <i class="fa-solid fa-pen" style="margin-right: 10px;"></i>
+                                <!-- Edit -->
+                            </button>
+                        </a>
+                        <a href="javascript:void(0);" onclick="openPdfInNewTab(@item.ID, event)" class="btn btn-info">Ver PDF</a>
 
-        </tr>
-    }
 
-</table>
+                        <a href="@Url.Action("Details", new { id = item.ID })" style="width: 175px">
+                            <button type="button" class="btn" style="background-color: #FFFF00; color: black; margin-right: 10px ">
+                                <i class="fa-solid fa-info" style="margin-right: 10px"></i>
+                                <!-- Details -->
+                            </button>
+                        </a>
+                        @if (Session["UserRole"].ToString() == "1")
+                        {
+                            <a href="@Url.Action("Delete", new { id = item.ID })" style="width: 175px">
+                                <button type="button" class="btn" style="background-color: #FF2819; color: black; margin-right: 10px">
+                                    <i class="fa-solid fa-trash" style="margin-right: 10px"></i>
+                                    <!-- Delete -->
+                                </button>
+                            </a>
+                        }
+                    </td>
 
-<script>
+                </tr>
+            }
+
+        </table>
+
+        <script>
     function openPdfInNewTab(id, event) {
     // Construye la URL del controlador que abrirá el PDF en una nueva ventana
     var pdfUrl = '@Url.Action("ViewPDF", "Documentos")/' + id;
@@ -93,4 +106,15 @@
     window.open(pdfUrl, '_blank');
     }
 
-</script>
+        </script>
+
+    }
+    else
+    {
+        <h2>Usted ya no posee permisos de acceso.</h2>
+    }
+}
+else
+{
+    <h2>Inicie sesión para observar el contenido.</h2>
+}

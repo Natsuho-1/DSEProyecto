@@ -45,22 +45,25 @@ namespace ObservatorioBodega.Controllers
         [HttpPost]
         public ActionResult InsertarDatos(Bodega modelo)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(modelo.Nombre) && !string.IsNullOrEmpty(modelo.Descripcion))
             {
-                // Realiza la inserción de datos en la base de datos utilizando Dapper
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-                using (var dbConnection = new MySqlConnection(connectionString))
+                if (ModelState.IsValid)
                 {
-                    dbConnection.Open();
-                    string query = "INSERT INTO Bodegas (ID,Nombre,Descripcion,Cantidad) VALUES (@ID, @Nombre, @Descripcion, @Cantidad)";
-                    dbConnection.Execute(query, modelo);
+                    // Realiza la inserción de datos en la base de datos utilizando Dapper
+                    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    using (var dbConnection = new MySqlConnection(connectionString))
+                    {
+                        dbConnection.Open();
+                        string query = "INSERT INTO Bodegas (ID,Nombre,Descripcion,Cantidad) VALUES (@ID, @Nombre, @Descripcion, @Cantidad)";
+                        dbConnection.Execute(query, modelo);
+                    }
+
+                    TempData["Exito"] = "Los datos se insertaron correctamente.";
+                    // Redirecciona a la página de éxito o a donde desees
+                    return RedirectToAction("Index");
                 }
-
-                TempData["Exito"] = "Los datos se insertaron correctamente.";
-                // Redirecciona a la página de éxito o a donde desees
-                return RedirectToAction("Index");
             }
-
+            ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View("Create", modelo); // Muestra el formulario nuevamente en caso de errores
         }
 

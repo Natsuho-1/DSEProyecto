@@ -41,36 +41,42 @@ namespace ObservatorioBodega.Controllers
         [HttpPost]
         public ActionResult InsertarDatos(Colaborador modelo)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(modelo.Usuario) && !string.IsNullOrEmpty(modelo.Correo) && !string.IsNullOrEmpty(modelo.Contrasena)
+                && !string.IsNullOrEmpty(modelo.Nombre) && !string.IsNullOrEmpty(modelo.Apellido))
             {
-                // Realiza la inserción de datos en la base de datos utilizando Dapper
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-                using (var dbConnection = new MySqlConnection(connectionString))
+                if (ModelState.IsValid)
                 {
-                    dbConnection.Open();
-                    string query = "INSERT INTO Colaboradores (Usuario, Correo, Contrasena, Nombre, Apellido, Rol) VALUES (@Usuario, @Correo, @Contrasena, @Nombre, @Apellido, @Rol)";
-                    dbConnection.Execute(query, modelo);
+                    // Realiza la inserción de datos en la base de datos utilizando Dapper
+                    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    using (var dbConnection = new MySqlConnection(connectionString))
+                    {
+                        dbConnection.Open();
+                        string query = "INSERT INTO Colaboradores (Usuario, Correo, Contrasena, Nombre, Apellido, Rol) VALUES (@Usuario, @Correo, @Contrasena, @Nombre, @Apellido, @Rol)";
+                        dbConnection.Execute(query, modelo);
+                    }
+
+                    TempData["Exito"] = "Los datos se insertaron correctamente.";
+                    // Redirecciona a la página de éxito o a donde desees
+                    return RedirectToAction("Index");
                 }
-
-                TempData["Exito"] = "Los datos se insertaron correctamente.";
-                // Redirecciona a la página de éxito o a donde desees
-                return RedirectToAction("Index");
+                return View("formAddCollaborators", modelo); // Muestra el formulario nuevamente en caso de errores
             }
-
+            ModelState.AddModelError("", "Todos los campos son obligatorios.");
             return View("formAddCollaborators", modelo); // Muestra el formulario nuevamente en caso de errores
         }
+
         public ActionResult Eliminar(int id)
         {
-            // Lógica para eliminar el dato con el ID proporcionado
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (var dbConnection = new MySqlConnection(connectionString))
             {
                 dbConnection.Open();
-                string query = "DELETE FROM Colaboradores WHERE ID = @ID";
+                string query = "UPDATE Colaboradores SET Estado = 2 WHERE ID = @ID";
                 dbConnection.Execute(query, new { ID = id });
             }
-            return RedirectToAction("Index"); // Redirige a la página principal o a donde desees
+            return RedirectToAction("Index");
         }
+
         public ActionResult Editar(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -92,19 +98,20 @@ namespace ObservatorioBodega.Controllers
         [HttpPost]
         public ActionResult GuardarEdicion(Colaborador modelo)
         {
-            if (ModelState.IsValid)
-            {
-                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-                using (var dbConnection = new MySqlConnection(connectionString))
+               if (ModelState.IsValid)
                 {
-                    dbConnection.Open();
-                    var query = "UPDATE Colaboradores SET Usuario = @Usuario, Correo = @Correo, Contrasena = @Contrasena, Nombre = @Nombre, Apellido = @Apellido, Rol = @Rol WHERE ID = @ID";
-                    dbConnection.Execute(query, modelo);
+                    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                    using (var dbConnection = new MySqlConnection(connectionString))
+                    {
+                        dbConnection.Open();
+                        var query = "UPDATE Colaboradores SET Usuario = @Usuario, Correo = @Correo, Contrasena = @Contrasena, Nombre = @Nombre, Apellido = @Apellido, Rol = @Rol WHERE ID = @ID";
+                        dbConnection.Execute(query, modelo);
 
-                    TempData["Exito"] = "Los cambios se guardaron correctamente.";
+                        TempData["Exito"] = "Los cambios se guardaron correctamente.";
+                    }
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
-            }
+            
 
             return View("formEditCollaborators");
         }

@@ -1,11 +1,20 @@
 ﻿@model string
+@if (Session["UserRole"] != null && Session["UserName"] != null)
+{
+    if ((int)Session["UserState"] == 1)
+    {
+        <script>
+    // Abre una nueva pestaña o ventana con el PDF
+    window.open('@Model', '_blank');
+        </script>
 
-<!-- Agrega un botón o enlace que, al hacer clic, abrirá una nueva pestaña o ventana con el PDF -->
-<a href="javascript:void(0);" onclick="openPdfInNewTab('@Model')">Abrir PDF en nueva pestaña</a>
-
-<script>
-    function openPdfInNewTab(pdfUrl) {
-        // Abre una nueva pestaña o ventana con el PDF
-        window.open(pdfUrl, '_blank');
     }
-</script>
+    else
+    {
+        <h2>Usted ya no posee permisos de acceso.</h2>
+    }
+}
+else
+{
+    <h2>Inicie sesión para observar el contenido.</h2>
+}

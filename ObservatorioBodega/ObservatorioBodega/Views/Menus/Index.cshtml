@@ -2,31 +2,64 @@
     ViewBag.Title = "Menu";
 }
 
-<div class="row">
-    <br />
+@if (Session["UserRole"] != null && Session["UserName"] != null)
+{
+   if ((int)Session["UserState"] == 1)
+    {
+        <div class="row">
+            <br />
+            <br />
+            <br />
+            <br />
 
-    <div class="col-md-4">        
-        <a class="btn btn-default" href="@Url.Action("Index", "Documentos", new { area = "" })">            
-            <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
-            <h2>Documentos</h2>
-        </a>                      
-    </div>
+            <div class="opciones">
+                <button>
+                    <a class="btn" href="@Url.Action("Index", "Documentos", new { area = "" })">
+                        <img src="~/Content/Multimedia/documentoslogo.png" height="100" width="100" />
+                        <h2>Documentos</h2>
+                    </a>
+                </button>
 
-    <div class="col-md-4">
+                <button>
+                    <a class="btn" href="@Url.Action("Index", "Bodegas", new { area = "" })">
+                        <img src="~/Content/Multimedia/almacenlogo.png" height="100" width="100" />
+                        <h2>Bodegas</h2>
+                    </a>
+                </button>
 
-        <a class="btn btn-default" href="@Url.Action("Index", "Bodegas", new { area = "" })">
-            <img src="~/Content/Multimedia/almacenlogo.png" height="100" width="100" />
-            <h2>Bodegas</h2>
-        </a>
+                @if (Session["UserRole"].ToString() == "1")
+                {
+                    <button>
+                        <a class="btn" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
+                            <img src="~/Content/Multimedia/colaboradoreslogo.png" height="100" width="100" />
+                            <h2>Colaboradores</h2>
+                        </a>
+                    </button>
+                }
+            </div>
 
-    </div>
-
-    <div class="col-md-4">
-
-        <a class="btn btn-default" href="@Url.Action("Index", "Colaboradores", new { area = "" })">
-            <img src="~/Content/Multimedia/colaboradoreslogo.png" height="100" width="100" />
-            <h2>Colaboradores</h2>
-        </a>
-
-    </div>
-</div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    }
+    else
+    {
+        <h2>Usted ya no posee permisos de acceso.</h2>
+    }
+}
+else
+{
+    <h2>No hay sesión activa.</h2>
+}

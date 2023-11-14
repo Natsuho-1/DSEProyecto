@@ -31,11 +31,12 @@ namespace ObservatorioBodega.Controllers
             {
                 dbConnection.Open();
                 string query = "SELECT D.*, C.Nombre, C.Apellido FROM Documentos D " +
-                "INNER JOIN Colaboradores C ON D.ColaboradorID = C.ID";
+                "INNER JOIN Colaboradores C ON D.UsuarioID = C.ID";
                 var documentos = dbConnection.Query<Documentos>(query);
                 return View(documentos);
             }
         }
+
 
         // GET: Documentos/Details/
         public ActionResult Details(int? id)
@@ -48,7 +49,9 @@ namespace ObservatorioBodega.Controllers
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                string query = "SELECT * FROM Documentos WHERE ID = @Id";
+                string query = "SELECT D.*, C.Nombre, C.Apellido FROM Documentos D " +
+                      "INNER JOIN Colaboradores C ON D.UsuarioID = C.ID " +
+                      "WHERE D.ID = @Id";
                 var documento = dbConnection.QueryFirstOrDefault<Documentos>(query, new { Id = id });
 
                 if (documento == null)
@@ -69,49 +72,58 @@ namespace ObservatorioBodega.Controllers
         // POST: Documentos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Titulo,ColaboradorID,URL")] Documentos documento, HttpPostedFileBase pdfFile)
+        public ActionResult Create([Bind(Include = "ID,Titulo,URL")] Documentos documento, HttpPostedFileBase pdfFile)
         {
-            if (ModelState.IsValid)
-            {
-                if (pdfFile != null && pdfFile.ContentLength > 0)
+           
+                if (ModelState.IsValid)
                 {
-                    // Validación del nombre del archivo
-                    string fileName = Path.GetFileName(pdfFile.FileName);
-                    if (!IsValidFileName(fileName))
+                    int Usuario = Convert.ToInt32(Session["UserID"]);
+                    int rolUsuario = Convert.ToInt32(Session["UserRole"]);
+
+                    if (pdfFile != null && pdfFile.ContentLength > 0)
                     {
-                        ModelState.AddModelError("pdfFile", "El nombre del archivo no es válido.");
-                        return View(documento);
+                        // Validación del nombre del archivo
+                        string fileName = Path.GetFileName(pdfFile.FileName);
+                        if (!IsValidFileName(fileName))
+                        {
+                            ModelState.AddModelError("pdfFile", "El nombre del archivo no es válido.");
+                            return View(documento);
+                        }
+
+                        // Guarda el archivo PDF en el servidor
+                        string serverPath = Server.MapPath("~/Uploads/PDFs/");
+                        string fullPath = Path.Combine(serverPath, fileName);
+
+                        // Verifica si el archivo ya existe
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            string alertScript = "<script>alert('El archivo ya existe.');</script>";
+                            ViewBag.AlertScript = new HtmlString(alertScript);
+
+                            return View(documento);
+                        }
+
+                        pdfFile.SaveAs(fullPath);
+
+                        // Asigna la ruta absoluta al campo URL
+                        documento.URL = Url.Content("/Uploads/PDFs/" + fileName);
+
+                        // Asigna los valores de Usuario y RolUsuario
+                        documento.Usuario = Usuario;
+                        documento.RolUsuario = rolUsuario;
+
+                        using (IDbConnection dbConnection = Connection)
+                        {
+                            dbConnection.Open();
+                            string query = "INSERT INTO Documentos (Titulo, UsuarioID, Rol, URL) VALUES (@Titulo, @Usuario, @RolUsuario, @URL)";
+                            dbConnection.Execute(query, documento);
+                        }
+
+                        return RedirectToAction("Index");
                     }
 
-                    // Guarda el archivo PDF en el servidor
-                    string serverPath = Server.MapPath("~/Uploads/PDFs/");
-                    string fullPath = Path.Combine(serverPath, fileName);
-
-                    // Verifica si el archivo ya existe
-                    if (System.IO.File.Exists(fullPath))
-                    {
-                        ModelState.AddModelError("pdfFile", "El archivo ya existe.");
-                        return View(documento);
-                    }
-
-                    pdfFile.SaveAs(fullPath);
-
-                    // Asigna la ruta absoluta al campo URL
-                    documento.URL = Url.Content("/Uploads/PDFs/" + fileName);
-
-                    using (IDbConnection dbConnection = Connection)
-                    {
-                        dbConnection.Open();
-                        string query = "INSERT INTO Documentos (Titulo, ColaboradorID, URL) VALUES (@Titulo, @ColaboradorID, @URL)";
-                        dbConnection.Execute(query, documento);
-                    }
-
-                    return RedirectToAction("Index");
+                    return View(documento);
                 }
-
-                return View(documento);
-            }
-
             return View(documento);
         }
 
@@ -142,14 +154,47 @@ namespace ObservatorioBodega.Controllers
         // POST: Documentos/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Titulo,ColaboradorID,URL")] Documentos documento)
+
+        public ActionResult Edit(Documentos documento, HttpPostedFileBase pdfFile)
         {
             if (ModelState.IsValid)
             {
                 using (IDbConnection dbConnection = Connection)
                 {
                     dbConnection.Open();
-                    string query = "UPDATE Documentos SET Titulo = @Titulo, ColaboradorID = @ColaboradorID, URL = @URL WHERE ID = @ID";
+
+                    if (pdfFile != null && pdfFile.ContentLength > 0)
+                    {
+                        string fileName = Path.GetFileName(pdfFile.FileName);
+
+                        if (!IsValidFileName(fileName))
+                        {
+                            ModelState.AddModelError("pdfFile", "El nombre del archivo no es válido.");
+                            return View(documento);
+                        }
+
+                        string serverPath = Server.MapPath("~/Uploads/PDFs/");
+                        string fullPath = Path.Combine(serverPath, fileName);
+
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            string alertScript = "<script>alert('El archivo ya existe.');</script>";
+                            ViewBag.AlertScript = new HtmlString(alertScript);
+                            return View(documento);
+                        }
+
+                        pdfFile.SaveAs(fullPath);
+
+                        string oldFilePath = Server.MapPath(documento.URL);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+
+                        documento.URL = Url.Content("/Uploads/PDFs/" + fileName);
+                    }
+
+                    string query = "UPDATE Documentos SET Titulo = @Titulo, URL = @URL WHERE ID = @ID";
                     dbConnection.Execute(query, documento);
                 }
 
@@ -158,6 +203,7 @@ namespace ObservatorioBodega.Controllers
 
             return View(documento);
         }
+
 
         // GET: Documentos/Delete/
         public ActionResult Delete(int? id)
@@ -215,11 +261,14 @@ namespace ObservatorioBodega.Controllers
                 {
                     return HttpNotFound();
                 }
-                
-                // Abre el PDF en una nueva ventana utilizando JavaScript
-                return Content($"<script>window.open('{pdfUrl}','_blank');</script>");
+
+                // Redirige directamente a la URL del PDF
+                return Redirect(pdfUrl);
             }
         }
+
+
+
         // Función para validar el nombre del archivo
         private bool IsValidFileName(string fileName)
         {

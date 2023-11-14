@@ -1,50 +1,75 @@
 ﻿@model ObservatorioBodega.Models.Colaborador
-
-@using (Html.BeginForm("InsertarDatos", "Colaboradores", FormMethod.Post))
+@if (Session["UserRole"] != null && Session["UserName"] != null)
 {
-    @Html.AntiForgeryToken()
-    <div style="display:flex; justify-content:flex-start">
-        <a href="@Url.Action("backToIndex", "Colaboradores")">
-            <button type="button" class="btn btn-danger">
-                <i class="fa-solid fa-arrow-left" style="margin-right:5px"></i>Regresar
-            </button>
-        </a>
-    </div>
-    <div style="display:flex; justify-content:center">
-        <div style="width:25%;">
-            <div class="form-group">
-                @Html.LabelFor(model => model.Nombre)
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
-            </div>
+    if ((int)Session["UserState"] == 1)
+    {
+        using (Html.BeginForm("InsertarDatos", "Colaboradores", FormMethod.Post))
+        {
+        @Html.AntiForgeryToken()
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Apellido)
-                @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control" })
-            </div>
+        <br />
+        <br />
+        <br />
+        <div style="display:flex; justify-content:flex-start">
+            <a href="@Url.Action("backToIndex", "Colaboradores")">
+                <button type="button" class="btn btn-danger">
+                    <i class="fa-solid fa-arrow-left" style="margin-right:5px"></i>Regresar
+                </button>
+            </a>
+        </div>
+        <div style="display:flex; justify-content:center">
+            <div style="width:25%;">
+                <div class="form-group">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre)
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", pattern = "^[a-zA-Z]+$" })
+                </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Correo)
-                @Html.TextBoxFor(model => model.Correo, new { @class = "form-control" })
-            </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Apellido)
+                    @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control" })
+                </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Usuario)
-                @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
-            </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Correo)
+                    @Html.TextBoxFor(model => model.Correo, new { @class = "form-control" })
+                </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Rol)
-                @Html.TextBoxFor(model => model.Rol, new { @class = "form-control" })
-            </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Usuario)
+                    @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
+                </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Contrasena)
-                @Html.TextBoxFor(model => model.Contrasena, new { @class = "form-control" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rol)
+                    @Html.DropDownListFor(model => model.Rol, new SelectList(new List<object>
+                        {
+                            new { Value = 1, Text = "Administrador" },
+                            new { Value = 2, Text = "Colaborador" }
+                        }, "Value", "Text"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Contrasena)
+                    @Html.PasswordFor(model => model.Contrasena, new { @class = "form-control" })
+                </div>
             </div>
         </div>
-    </div>
-    <div style="display:flex; justify-content:center; margin-top:15px">
-        <button type="submit" class="btn btn-primary">Insertar Datos</button>
-    </div>
-}
+        <div style="display:flex; justify-content:center; margin-top:15px">
+            <button type="submit" class="btn btn-primary">Insertar Datos</button>
+        </div>
+    }
 
+}
+else
+{
+    <h2>Usted ya no posee permisos de acceso.</h2>
+}
+}
+else
+{
+<h2>Inicie sesión para observar el contenido.</h2>
+}
